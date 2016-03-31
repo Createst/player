@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="zh-cn">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  
+   <![if IE]>
+    <script type="text/javascript" src="js/html5.js"></script>
+   <![endif]->
+  <title>幸福快乐</title>
+  <style>
+  *{margin:0px;padding:0px;font-family:"微软雅黑";}
+	html,body{height:100%;overflow:hidden;}
+	body{background-image:url(images/bg.jpg);background-repeat:  no-repeat;background-size:cover;position:relative;}
+	/*播放器标题*/
+	h1{text-align:center;height:50px;position:absolute;left:0px;top:40px;right:0px;margin:0 auto;line-height:50px;letter-spacing:10px;color:pink;}
+	/*音乐列表*/
+	.nav{width:824px;height:200px;border:1px gray solid;left:0px;top:110px;right:0px;margin:0 auto;position:absolute;border-radius:10px;}
+	.nav ul li{list-style:none;overflow:hidden;position:absolute;cursor:pointer;}
+	.nav ul li:nth-child(1){border-radius:30px;width:60px;height:60px;left:31px;top: 17px;}
+	.nav ul li:nth-child(2){border-radius:40px;width:80px;height:80px;left: 102px; top: 108px;}
+	.nav ul li:nth-child(3){border-radius:50px;width:100px;height:100px;left: 280px;top: 21px;}
+	.nav ul li:nth-child(4){border-radius:35px;width:70px;height:70px;left:486px;top: 84px;}
+	.nav ul li:nth-child(5){border-radius:30px;width:60px;height:60px;right:91px;bottom:44px;}
+
+	/*歌词和控制器*/
+	.foot{width:824px;height:350px;margin:0 auto;position:absolute;top:670px;opacity:0;left:0px;right:0px;background:rgba(255,255,255,0.1);transition:all 1s ease-in;border-radius:10px;display:-webkit-flex;display:-o-flex;display:-ms-flex;display:-moz-flex;display:flex;}
+
+	.show{top:312px;opacity:1;}
+
+	.foot .gc{height:350px;-webkit-flex:7;-ms-flex:7;-moz-flex:7;-o-flex:7;flex:7;}
+	.foot .gc p{text-align:center;margin-top:135px;}
+	.foot .control{height:350px;-webkit-flex:3;-ms-flex:3;-moz-flex:3;-o-flex:3;flex:3;background:rgba(0,0,0,0.7);}
+
+	.foot .control > div:nth-child(1){ height:87px;text-align:center;line-height:105px;}
+	.foot .control > div a{display:inline-block;width:30px;height:30px;border-radius:5px;}
+	.foot .control > div a:nth-child(1){background:url(images/player_bg.png) -71px 0px;}
+	.foot .control > div a:nth-child(1):hover{background-position:-71px -32px;}
+	.foot .control > div a:nth-child(2){background:url(images/player_bg.png)  -110px -6px;}
+	
+	.foot .control > div a:nth-child(3){background:url(images/player_bg.png) -151px 0px;}
+	.foot .control > div a:nth-child(3):hover{background-position:-151px -32px;}
+	.foot .control > div a:nth-child(4){background:url(images/player_bg.png) -186px 0px;}
+	.foot .control > div a:nth-child(4):hover{background-position:-186px -32px;}
+
+	.foot .control > div:nth-child(2){ height:260px;}
+	.foot .control > div:nth-child(2) p{text-align:center;height:40px;line-height:40px;color:white;letter-spacing:5px;color:rgb(240, 119, 140);}
+	.foot .control > div:nth-child(2) div{height:218px;text-align:center;}
+	/*图片旋转动画*/
+	@-webkit-keyframes xz{
+		0%{transform:rotate(0deg);}
+		100%{transform:rotate(360deg);}
+	}
+	@-o-keyframes xz{
+		0%{transform:rotate(0deg);}
+		100%{transform:rotate(360deg);}
+	}
+	@-moz-keyframes xz{
+		0%{transform:rotate(0deg);}
+		100%{transform:rotate(360deg);}
+	}
+	@-ms-keyframes xz{
+		0%{transform:rotate(0deg);}
+		100%{transform:rotate(360deg);}
+	}
+	@keyframes xz{
+		0%{transform:rotate(0deg);}
+		100%{transform:rotate(360deg);}
+	}
+	/*旋转类，当点击图片时增加*/
+	.xz2{-webkit-animation:xz 2s linear infinite;-ms-animation:xz 2s linear infinite;-moz-animation:xz 2s linear infinite;animation:xz 2s linear infinite;-o-animation:xz 2s linear infinite;}
+
+	.gc{width:376px;height:350px;position:relative;overflow:hidden;text-align:center;}
+	/*歌词样式*/
+	.gc section{transition: all 2s linear;line-height:30px;border-radius:15px;cursor:pointer;white-space:nowrap;overflow:hidden;}
+	.gc > section:nth-child(1){transition: margin-top 2s linear;}
+	.cor{color:blue;background:white;box-shadow:0px 0px 10px 0px blue inset;}
+		/*喇叭样式*/
+	.laba div{position:absolute;top:0px;border:1px black solid;z-index:10;}
+	.laba div:nth-child(1){width:80px;height:80px;left:5px;border-radius:40px;top:5px;background:gray;}
+	.laba div:nth-child(2){width:30px;height:30px;left:30px;border-radius:15px;top:30px;background:black;}
+	.laba div:nth-child(3){width:10px;height:10px;left:40px;border-radius:5px;top:40px;background:gray;}
+	/*喇叭动画*/
+	@-webkit-keyframes dd{
+	
+		0%{transform:scale(1);}
+		70%{transform:scale(1.1);}
+		100%{transform:scale(1.1);}
+	}
+	@-moz-keyframes dd{
+	
+		0%{transform:scale(1);}
+		70%{transform:scale(1.1);}
+		100%{transform:scale(1.1);}
+	}
+	@-o-keyframes dd{
+	
+		0%{transform:scale(1);}
+		70%{transform:scale(1.1);}
+		100%{transform:scale(1.1);}
+	}
+	@-ms-keyframes dd{
+	
+		0%{transform:scale(1);}
+		70%{transform:scale(1.1);}
+		100%{transform:scale(1.1);}
+	}
+	@keyframes dd{
+	
+		0%{transform:scale(1);}
+		70%{transform:scale(1.1);}
+		100%{transform:scale(1.1);}
+	}
+	/*动画类，当点击图片时增加*/
+	.dh{-webkit-animation:dd .5s ease-in infinite;-moz-animation:dd .5s ease-in infinite;-ms-animation:dd .5s ease-in infinite;-o-animation:dd .5s ease-in infinite;animation:dd .5s ease-in infinite;}
+	/*菜单样式*/
+	.menu1{width:120px;height:150px;background:white;position:absolute;left:0px;top:0px;z-index:10;box-shadow:1px 1px 9px 0px white;display:none;}
+	.menu1 ul li{list-style:none;border-bottom:1px solid #dbdbdb;height:30px;line-height:30px;cursor:pointer;}
+	.menu1 ul li img{margin:0 10px 0 10px;}
+	.menu1 ul li:hover{background:#ccc;}
+	/*皮肤库样式*/
+	.face{width:730px;height:360px;background:rgba(0,0,0,.3);position:absolute;left:400px;top:200px;z-index:20;display:none;}
+	.face header{width:100%;height:40px;position:relative;background:linear-gradient(to top,#003300,#330099);color:white;line-height:40px;text-align:center;}
+	.face header span{position:absolute;left:0px;right:0px;top:0px;margin:0 auto;font-size:18px;letter-spacing:5px;}
+	.face header img{position:absolute;right:0px;top:6px;cursor:pointer;}
+	.face section ul{}
+	.face section ul li{list-style:none;float:left;margin:15px 0px 0px  32px;cursor:pointer;border:3px solid white;overflow:hidden;}
+	.face section ul li img{transition:all .3s linear;}
+	.face section ul li img:hover{transform:scale(1.1);}
+  </style>
+ </head>
+ <body>
+ <!--播放器标题-->
+ <h1>只为你</h1>
+	<!--音乐列表-->
+  <div class="nav">
+		<ul>
+		<li songSrc="mp3/1.mp3"><img src="images/1.jpg" width="60px" title="爱"/></li>
+		<li songSrc="mp3/2.mp3"><img src="images/2.jpg" width="80px" title="好想你"/></li>
+		<li songSrc="mp3/3.mp3"><img src="images/3.jpg" width="100px" title="只要有你"/></li>
+		<li songSrc="mp3/4.mp3"><img src="images/1.jpg" width="70px" title="人在旅途"/></li>
+		<li songSrc="mp3/5.mp3"><img src="images/2.jpg" width="60px" title="美人吟"/></li>
+		</ul>
+  </div>
+<!--歌词和控制器-->
+  <div class="foot" id="foot">
+  <!--歌词显示-->
+	  <div class="gc">
+			
+	  </div>
+	  <div class="laba">
+			<div></div>
+			<div></div>
+			<div></div>
+	  </div>
+<!--控制器开关-->
+	 <div class="control">
+		 <div>
+		 <a href="javascript:void(0)"></a><!--上一首-->
+		 <a href="javascript:void(0)"></a><!--暂停-->
+		 <a href="javascript:void(0)"></a><!--下一首-->
+		 <a href="javascript:void(0)" title="左:小 右:大"></a><!--音量控制-->
+		 </div>
+<!--控制区显示歌曲信息-->
+		<div>
+			<p><b>爱</b></p>
+			<div><br><img src="images/1.jpg"/></div>
+		 </div>	 
+	 </div>	
+  </div>
+
+<!--右击菜单-->
+	<div class="menu1">
+		<ul>
+			<li><img src="images/ico6.jpg"/>更换皮肤</li>
+			<li><img src="images/ico4.jpg"/>刷新</li>
+			<li><img src="images/ico7.jpg"/>退出</li>
+		</ul>
+	</div>
+	<!--皮肤-->
+	<div class="face">
+			<header><span>桌面皮肤</span><img src="images/close.png"/></header>
+			<section>
+				<ul>
+					<li><img src="images/s_1.jpg" width="200px" height="125px"/></li>
+					<li><img src="images/s_2.jpg" width="200px" height="125px"/></li>
+					<li><img src="images/s_3.jpg" width="200px" height="125px"/></li>
+					<li><img src="images/s_4.jpg" width="200px" height="125px"/></li>
+					<li><img src="images/s_5.jpg" width="200px" height="128px"/></li>
+					<li><img src="images/s_6.jpg" width="200px" height="125px"/></li>
+				</ul>
+			</section>
+	</div>
+	<!--音乐播放--> 
+	<audio src="mp3/1.mp3"  id="music"ontimeupdate="bofang()" />
+	<textarea id = "0" cols="30" rows="40" style="display:none;">
+[00:00.93]曲:大力 :大力/李子
+[00:07.56]喔......
+[00:36.88]把你的心我的心串一串
+[00:41.82]串一株幸运草串一同心圆
+[00:45.64]让所有期待未的呼唤
+[00:49.34]趁青春做伴
+[00:52.60]让年轻越长大越孤单
+[00:56.88]把我的幸运草种在你的梦田
+[01:00.85]让地球随我的同心圆
+[01:04.58]永远的不停转
+[01:07.67]向天空大声的呼唤声我爱你
+[01:12.66]向那流浪的白云声我想你
+[01:16.40]让那天空听得见、让那白云看得见
+[01:20.76]谁也擦不掉我下的言
+[01:24.53]想你一起看大海我爱你
+[01:28.66]你最亮的星星声我想你
+[01:32.55]听听大海的誓言、看看执著的蓝天
+[01:36.41]让我自由自在的恋爱
+[01:39.02]喔......
+[02:05.41]把你的心我的心串一串
+[02:11.73]串一株幸运草串一同心圆
+[02:15.93]让所有期待未的呼唤
+[02:19.25]趁青春做伴
+[02:22.32]让年轻越长大越孤单
+[02:26.83]把我的幸运草种在你的梦田
+[02:30.86]让地球随我的同心圆
+[02:34.71]永远的不停转
+[02:37.05]向天空大声的呼唤声我爱你
+[02:42.57]向那流浪的白云声我想你
+[02:46.26]让那天空听得见、让那白云看得见
+[02:50.44]谁也擦不掉我下的言
+[02:54.99]想你一起看大海我爱你
+[02:58.64]你最亮的星星声我想你
+[03:03.20]听听大海的誓言、看看执著的蓝天
+[03:07.29]让我自由自在的恋爱
+[03:10.80]喔......
+[03:16.52]让年轻越长大越孤单
+[03:19.67]把我的幸运草种在你的梦田
+[03:23.99]让地球随我的同心圆
+[03:27.26]永远的不停转
+[03:29.77]向天空大声的呼唤声我爱你
+[03:35.41]向那流浪的白云声我想你
+[03:39.22]让那天空听得见、让那白云看得见
+[03:43.47]谁也擦不掉我下的言
+[03:47.41]想你一起看大海我爱你
+[03:51.39]你最亮的星星声我想你
+[03:55.19]听听大海的誓言、看看执著的蓝天
+[03:59.36]让我自由自在的恋爱
+[04:02.77]
+	</textarea>
+	<textarea id = "1" cols="30" rows="40" style="display:none;">
+[00:00.00]歌名：好想你
+[00:08.99]歌手：徐若瑄
+[00:15.62]
+[00:37.36]还没忘了你 这么多天没见
+[00:44.10]可是我总想起你的声音在我耳边
+[00:51.94]今天心情好吗 是否不愉快
+[00:58.81]要一切都看得开 世界没有太坏
+[01:06.13]虽然不在你身边 我的心有一条线
+[01:13.39]连着你 牵着你
+[01:19.48]好想你 想到愿意相信
+[01:26.12]我就闭上了眼睛 你在这里
+[01:33.79]别忘记 我们的约定
+[03:09.75][01:40.61]一直都在我心里 不管你在哪里
+[03:22.95][01:51.51]不要忘了我有多么爱你
+[02:07.16]不要忘了吃饭 不管有多忙
+[02:13.67]不要忘了开车时候一定要往前看
+[02:21.04]其实我真的很快乐
+[02:24.61]有你一直守侯
+[02:28.23]一直走到了以后都挽着你的手
+[02:35.51]虽然不在你身边 但我在你心里面
+[02:42.79]我愿意 等着你
+[02:48.66]我好想你 想到不能呼吸
+[02:55.36]想到全身没力气 没有关系
+[03:02.53]你别忘记 我们的约定
+[03:34.43]我一直在这里 别忘了我有多么爱你
+	</textarea>
+	<textarea id = "2" cols="30" rows="40" style="display:none;">
+[00:11.06]只要有你
+[00:13.70]演唱：那英、孙楠
+[00:16.19]
+[00:23.65]谁能告诉我 有没有这样的笔
+[00:28.67]能画出一双双 不流泪的眼睛
+[00:34.81]留得住世上 一纵既逝的光阴
+[00:40.45]能让所有美丽 从此也不再凋零
+[00:45.93]
+[00:46.40]如果是这样 我可以安慰自己
+[00:51.59]在没有你的夜里 能画出一线光明
+[00:57.66]留得住快乐 全部都送去给你
+[01:03.08]苦涩的味道 变了甜蜜
+[01:07.79]
+[01:08.60]从此也不用分开 相爱的天和地
+[01:14.28]还能在同一天空 月亮太阳再相遇
+[01:19.92]生命中只要有你 什么都变了可以
+[01:25.57]让所有流星随时都相遇
+[01:30.83]
+[01:31.24]从此在人世上演 没有无奈的分离
+[01:36.89]我不用睁着眼睛 看你远走的背影
+[01:42.67]没有变坏的青春 没有失落的爱情
+[01:48.34]所有承诺永恒的像星星
+[01:54.42]
+[02:20.22]谁能告诉我 有没有这样的笔
+[02:25.39]能画出一双双 不流泪的眼睛
+[02:31.51]留得住世上 一纵既逝的光阴
+[02:37.14]能让所有美丽 从此也不再凋零
+[02:42.46]
+[02:42.99]如果是这样 我可以安慰自己
+[02:48.22]在没有你的夜里 能画出一线光明
+[02:54.22]留得住快乐 全部都送去给你
+[02:59.53]苦涩的味道 变了甜蜜
+[03:04.90]
+[03:05.34]从此也不用分开 相爱的天和地
+[03:10.89]还能在同一天空 月亮太阳再相遇
+[03:16.61]生命中只要有你 什么都变了可以
+[03:22.29]让所有流星随时都相遇
+[03:27.61]
+[03:28.05]从此在人世上演 没有无奈的分离
+[03:33.68]我不用睁着眼睛 看你远走的背影
+[03:39.49]没有变坏的青春 没有失落的爱情
+[03:45.01]所有承诺永恒的像星星
+[03:51.65]
+
+	</textarea>
+<textarea id = "3" cols="30" rows="40" style="display:none;">
+[00:01.35]人在旅途
+[00:04.67]作词：梁立人
+[00:05.71]作曲：何国杰
+[00:10.30]演唱：云菲菲
+[00:14.38]
+[00:22.00]从来不怨命运之错
+[00:26.08]不怕旅途多坎坷
+[00:30.15]向着那梦中的地方去
+[00:34.32]错了我也不悔过
+[00:37.86]
+[00:38.43]人生本来苦恼已多
+[00:42.54]再多一次又如何
+[00:46.67]若没有分别痛苦时刻
+[00:50.81]你就不会珍惜我
+[00:54.31]
+[00:54.91]千山万水脚下过
+[00:59.02]一缕情丝挣不脱
+[01:03.10]纵然此时候情如火
+[01:07.28]心里话儿向谁说
+[01:10.89]
+[01:11.41]我不怕旅途孤单寂寞
+[01:15.49]只要你也想念我
+[01:19.61]我不怕旅途孤单寂寞
+[01:23.73]只要你也想念我
+[01:27.85]只要你也想念我
+[01:33.49]
+[01:54.71]从来不怨命运之错
+[01:58.75]不怕旅途多坎坷
+[02:02.82]向着那梦中的地方去
+[02:06.97]错了我也不悔过
+[02:10.57]
+[02:11.14]人生本来苦恼已多
+[02:15.21]再多一次又如何
+[02:19.38]若没有分别痛苦时刻
+[02:23.48]你就不会珍惜我
+[02:27.03]
+[02:27.59]千山万水脚下过
+[02:31.70]一缕情丝挣不脱
+[02:35.85]纵然此时候情如火
+[02:39.96]心里话儿向谁说
+[02:43.49]
+[02:44.10]我不怕旅途孤单寂寞
+[02:48.17]只要你也想念我
+[02:52.33]我不怕旅途孤单寂寞
+[02:56.48]只要你也想念我
+[03:00.52]只要你也想念我
+[03:07.75]
+	</textarea>
+	<textarea id = "4" cols="30" rows="40" style="display:none;">
+[00:00.51]美人吟
+[00:02.98]作词：尤小刚
+[00:04.00]作曲：张宏光
+[00:06.00]演唱：李玲玉
+[00:12.00]
+[00:14.07]蓝蓝的白云天
+[00:19.73]悠悠水边流
+[00:25.72]玉手扬鞭马儿走
+[00:31.69]月上柳梢头
+[00:37.51]红红的美人脸
+[00:43.57]淡淡柳眉愁
+[00:49.45]飞针走线荷包绣
+[00:55.11]相思在心头
+[00:59.49]
+[01:00.42]风儿清 水长流
+[01:06.39]哥哥天边走
+[01:12.34]自古美女爱英雄
+[01:19.49]一诺千金到尽头
+[01:24.52]风声紧 雷声吼
+[01:30.28]妹妹苦争斗
+[01:36.31]自古红颜多薄命
+[01:43.40]玉碎瓦全登西楼
+[02:01.11]蓝蓝的白云天
+[02:07.17]悠悠水边流
+[02:13.21]玉手扬鞭马儿走
+[02:19.08]月上柳梢头
+[02:23.13]
+[02:25.18]红红的美人脸
+[02:31.09]淡淡柳眉愁
+[02:37.21]飞针走线荷包绣
+[02:43.00]相思在心头
+[02:46.95]
+[02:48.10]风儿清 水长流
+[02:53.95]哥哥天边走
+[02:59.98]自古美女爱英雄
+[03:06.85]一诺千金到尽头
+[03:11.73]风声紧 雷声吼
+[03:17.80]妹妹苦争斗
+[03:23.71]自古红颜多薄命
+[03:30.89]玉碎瓦全登西楼
+[03:35.07]
+[03:35.76]自古美女爱英雄
+[03:42.92]一诺千金到尽头
+[03:50.92]
+	</textarea>
+  <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript">
+
+	
+	
+	
+			$(".gc").html("");//加载结束，清空歌词容器
+			$(document.body).dblclick(function(){//双击退出控制面板
+				$(".foot").toggleClass("show");
+			})
+			
+			var songSrc;
+			var name;
+			var imgSrc;
+			var index=0;
+			var audio=$("audio")[0];//转为dom对象
+			var mark=0;//播放开关，0：stop；1：play
+			//点击图片播放
+			$(".nav ul li").mousedown(function(event){
+				
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}
+				index=$(this).index();//歌曲索引
+				//音乐路径
+				songSrc=$(this).attr("songSrc");
+				name=$(this).find("img").attr("title");
+				//图片路径
+				imgSrc=$(this).find("img").attr("src");
+					
+				$(this).addClass("xz2").siblings().removeClass("xz2");
+				//显示控制面板
+				$(".foot").addClass("show");
+				//播放选择的音乐
+				$(audio).attr("src",songSrc);
+				audio.play();
+				//更换显示图片
+				$(".foot .control > div:nth-child(2) div").find("img").attr('src',imgSrc);
+				//更换显示音乐名
+				$(".foot .control > div:nth-child(2) b").text(name);
+				$(".foot .control > div a:nth-child(2)").css("background-position","-297px -94px");
+				$(".laba div").addClass("dh");//喇叭动画
+				mark=1;//开关打开
+				getGc();
+			})
+/******************************************音乐控制部分********************************************/
+			//暂停 开始事件
+			$(".foot .control > div a:nth-child(2)").mousedown(function(event){
+			
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}
+				if(mark==1)
+				{
+					$(this).css("background-position","-110px -6px");
+					$(".nav ul li:eq("+(index)+")").toggleClass("xz2");//停止旋转
+					audio.pause();//暂停正在播放的音乐
+					mark=0;//开关关闭
+					$(".laba div").removeClass("dh");
+				}else{	
+					$(this).css("background-position","-297px -94px");
+					$(".nav ul li:eq("+(index)+")").toggleClass("xz2");//开始旋转
+					audio.play();//继续播放音乐
+					mark=1;//开关打开
+					if($(".gc").html()==""){//如果歌词区为空，再加载歌词					
+						getGc();
+					}			
+					$(".laba div").addClass("dh");//喇叭动画
+				}
+				
+				
+			})
+
+			$(".foot .control > div a:nth-child(2)").mouseenter(function(){
+				//鼠标悬浮在开关上，变亮
+
+				if(mark==1)
+				{
+					$(this).css("background-position","-339px -94px");
+				}else{
+					$(this).css("background-position","-110px -47px");
+				}
+			
+			})
+
+			$(".foot .control > div a:nth-child(2)").mouseleave(function(){
+				//鼠标悬浮在开关上，变暗
+
+				if(mark==1)
+				{
+					$(this).css("background-position","-297px -94px");
+				}else{
+					$(this).css("background-position","-110px -6px");
+				}
+			
+			})
+			//上一首
+			$(".foot .control > div a:nth-child(1)").mousedown(function(event){
+				
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}
+				index--;//播放上一首
+				if(index<0)//已经是第一首，播放最后一首
+				{
+					index=4;
+				}
+				var liIndex=$(".nav ul li:eq("+index+")");
+				//音乐路径
+				songSrc=liIndex.attr("songSrc");
+				name=liIndex.find("img").attr("title");
+				//图片路径
+				imgSrc=liIndex.find("img").attr("src");	
+				//开始旋转
+				liIndex.addClass("xz2").siblings().removeClass("xz2");
+				//播放选择的音乐
+				$(audio).attr("src",songSrc);
+				audio.play();
+				//更换显示图片
+				$(".foot .control > div:nth-child(2) div").find("img").attr('src',imgSrc);
+				//更换显示音乐名
+				$(".foot .control > div:nth-child(2) b").text(name);
+
+				$(".foot .control > div a:nth-child(2)").css("background-position","-297px -94px");
+				$(".laba div").addClass("dh");//喇叭动画
+				mark=1;//开关打开
+			getGc();
+			})
+
+
+			//下一首
+			$(".foot .control > div a:nth-child(3)").mousedown(function(event){
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}
+				
+				index++;//播放下一首
+				if(index>4)//已经是最后一首，播放第一首
+				{
+					index=0;
+				}
+				var liIndex=$(".nav ul li:eq("+index+")");
+				//音乐路径
+				songSrc=liIndex.attr("songSrc");
+				name=liIndex.find("img").attr("title");
+				//图片路径
+				imgSrc=liIndex.find("img").attr("src");	
+				//开始旋转
+				liIndex.addClass("xz2").siblings().removeClass("xz2");
+				//播放选择的音乐
+				$(audio).attr("src",songSrc);
+				audio.play();
+				//更换显示图片
+				$(".foot .control > div:nth-child(2) div").find("img").attr('src',imgSrc);
+				//更换显示音乐名
+				$(".foot .control > div:nth-child(2) b").text(name);
+
+				$(".foot .control > div a:nth-child(2)").css("background-position","-297px -94px");
+				$(".laba div").addClass("dh");//喇叭动画
+				mark=1;//开关打开
+				getGc();
+			})
+			//禁止浏览器默认右击菜单
+			document.oncontextmenu=function(){
+			
+				return false;
+			}
+			
+			//音量控制
+			$(".foot .control > div a:nth-child(4)").mousedown(function(e){
+				
+				var vol=parseFloat(audio.volume.toString().substring(0,3));
+				
+				switch(parseInt(e.which)){	
+				case 1:
+					{
+						
+						if(vol<=0)
+						{
+							vol=0;
+						}else{
+							
+							audio.volume-=0.1;
+						}
+						break;
+					}
+					
+				case 3:
+					{
+						e.stopPropagation();//阻止冒泡					
+						if(vol>=1)
+						{
+							vol=1;
+						}else{
+							
+							audio.volume+=0.1;
+						}
+						break;
+					}
+				}
+				
+				
+			})
+
+			//播放完，停止旋转
+			audio.onended=function(){
+					$(".foot .control > div a:nth-child(2)").css("background-position","-110px -6px");
+					$(".nav ul li:eq("+(index)+")").toggleClass("xz2");//停止旋转
+					audio.pause();//暂停正在播放的音乐
+					mark=0;//开关关闭
+					$(".laba div").removeClass("dh");
+					$(".gc > section:first-child").css({"transion-duration":"0s","margin-top":"0px"});	//歌词回到原点
+			}
+/******************************************皮肤库部分********************************************/		
+			//右击显示菜单
+			$("body").mousedown(function(e){
+				
+				
+				if(parseInt(e.which)==3){//右击
+					var x=e.pageX;//获得鼠标右击的坐标
+					var y=e.pageY;
+
+					$(".menu1").css({"left":x,"top":y,"display":"block"});
+				}else if(parseInt(e.which)==1){//左击菜单消失
+					
+					$(".menu1").css({"display":"none"});
+				}
+			})
+			//弹出皮肤库
+			$(".menu1 ul li").mousedown(function(event){
+				
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}
+				
+				var index=$(this).index();
+				if(parseInt(index)==0){
+					
+					$(".face").css("display","block");
+				}
+			
+			})
+			//关闭皮肤库
+			$(".face header img").mousedown(function(event){
+			
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}
+
+				$(".face").css("display","none");
+			})
+			//选择皮肤
+			$(".face section ul li").mousedown(function(event){
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}	
+				var index2=$(this).index();			
+				$("body").css("background-image","url(images/b_"+(index2+1)+".jpg)");
+			})
+			//拖动皮肤库
+			$(".face header").bind("mousedown",function(event){
+				if(event.which!=1)//如果不是点击左键，则返回false
+				{
+					return false;
+				}
+				$(this).css("cursor","move");//改变鼠标指针为移动
+				var offet=$(this).offset();//获得皮肤库距离页面上 左的距离
+				var left1=offet.left;
+				var top1=offet.top;
+
+				var xx=event.pageX;//获得鼠标左击的坐标
+				var yy=event.pageY;
+				//给皮肤库绑定移动事件
+				$(".face").bind("mousemove",function(e){
+				e.preventDefault();
+				var _x=e.pageX-xx+left1+5;//得到移动后的坐标
+				var _y=e.pageY-yy+top1+5;
+				$(".face").css({"left":_x,"top":_y});//改变坐标
+				})
+					
+					
+			})
+			//当鼠标松开，鼠标指针为默认。
+			$(".face header").bind("mouseup",function(){
+				$(this).css("cursor","default");
+				$(".face").unbind("mousemove");//解除移动事件
+			})
+
+
+/******************************************歌词显示部分********************************************/
+ function  getGc(){
+			var value=$("#"+index).val();//获得歌词
+		//下面是分解歌词获得时间
+		var reses=value.split("[");	
+		$(".gc").html("");
+		for(var i=0;i<reses.length;i++)
+		{
+			if(reses[i]!=""){
+
+			var res=reses[i].split("]");		
+
+			if(res[1]!="\n"){		
+				
+				var time=res[0];
+				var val=res[1];		
+				var timer=time.split(":");
+				var second=parseInt(timer[0])*60+parseInt(timer[1])*1;
+				//把歌词添加到显示区
+				$(".gc").append("<section class="+second+">"+val+"</section>")
+		
+			}
+			}
+		}
+ 
+ }
+	
+		//下面 是给audio增加事件
+		
+		function bofang(){
+			var index2=1;
+			var toltime=parseInt(get$("music").duration);//得到音乐总时长
+			var current=parseInt(get$("music").currentTime);//当前播放时间点			
+			$("."+current).addClass("cor").siblings().removeClass("cor");//增加字体颜色
+			//控制歌词滚动
+			$(".gc>section").each(function(){
+				
+				if($(this).hasClass("cor")){
+					index2=$(this).index();
+				}
+			})
+
+			if(index2%3==0){
+		
+			$(".gc > section:first-child").css("margin-top",-(index2-3)*30+"px");
+
+			}
+					
+		}
+	//选择时间点播放
+		$(".gc ").on("dblclick","section",function(e){
+			e.stopPropagation();
+			var num=$(this).index();//得到选择的索引
+			var selectTime=parseInt($(this).attr("class"));//得到将要播放的时间
+			get$("music").currentTime=selectTime;//改变时间
+			
+		})
+
+		function get$(id){
+			return document.getElementById(id);
+		}
+
+	
+
+		
+  </script>
+ </body>
+</html>
